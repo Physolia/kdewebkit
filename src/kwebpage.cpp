@@ -25,7 +25,7 @@
 
 // Own
 #include "kwebpage.h"
-#include "kwebwallet.h"
+//#include "kwebwallet.h"
 
 // Local
 #include "kwebpluginfactory.h"
@@ -54,25 +54,25 @@
 #include <QtCore/QCoreApplication>
 #include <QAction>
 #include <QFileDialog>
-#include <QWebFrame>
 #include <QtNetwork/QNetworkReply>
 #include <qtemporaryfile.h>
+#include <QWebEngineSettings>
 
 #define QL1S(x)  QLatin1String(x)
 #define QL1C(x)  QLatin1Char(x)
 
-static void reloadRequestWithoutDisposition(QNetworkReply *reply)
-{
-    QNetworkRequest req(reply->request());
-    req.setRawHeader("x-kdewebkit-ignore-disposition", "true");
+//static void reloadRequestWithoutDisposition(QNetworkReply *reply)
+//{
+//    QNetworkRequest req(reply->request());
+//    req.setRawHeader("x-kdewebkit-ignore-disposition", "true");
 
-    QWebFrame *frame = qobject_cast<QWebFrame *> (req.originatingObject());
-    if (!frame) {
-        return;
-    }
+//    QWebFrame *frame = qobject_cast<QWebFrame *> (req.originatingObject());
+//    if (!frame) {
+//        return;
+//    }
 
-    frame->load(req);
-}
+//    frame->load(req);
+//}
 
 static bool isMimeTypeAssociatedWithSelf(const KService::Ptr &offer)
 {
@@ -210,7 +210,7 @@ public:
     KWebPage *q;
     QPointer<QWidget> window;
     QString mimeType;
-    QPointer<KWebWallet> wallet;
+//    QPointer<KWebWallet> wallet;
     bool inPrivateBrowsingMode;
 };
 
@@ -229,30 +229,30 @@ static void setActionShortcut(QAction *action, const QList<QKeySequence> &shortc
 }
 
 KWebPage::KWebPage(QObject *parent, Integration flags)
-    : QWebPage(parent), d(new KWebPagePrivate(this))
+    : QWebEnginePage(parent), d(new KWebPagePrivate(this))
 {
-    // KDE KParts integration for <embed> tag...
-    if (!flags || (flags & KPartsIntegration)) {
-        setPluginFactory(new KWebPluginFactory(this));
-    }
+//    // KDE KParts integration for <embed> tag...
+//    if (!flags || (flags & KPartsIntegration)) {
+//        setPluginFactory(new KWebPluginFactory(this));
+//    }
 
     QWidget *parentWidget = qobject_cast<QWidget *>(parent);
     d->window = (parentWidget ? parentWidget->window() : 0);
 
-    // KDE IO (KIO) integration...
-    if (!flags || (flags & KIOIntegration)) {
-        KIO::Integration::AccessManager *manager = new KIO::Integration::AccessManager(this);
-        // Disable QtWebKit's internal cache to avoid duplication with the one in KIO...
-        manager->setCache(0);
-        manager->setWindow(d->window);
-        manager->setEmitReadyReadOnMetaDataChange(true);
-        setNetworkAccessManager(manager);
-    }
+//    // KDE IO (KIO) integration...
+//    if (!flags || (flags & KIOIntegration)) {
+//        KIO::Integration::AccessManager *manager = new KIO::Integration::AccessManager(this);
+//        // Disable QtWebKit's internal cache to avoid duplication with the one in KIO...
+//        manager->setCache(0);
+//        manager->setWindow(d->window);
+//        manager->setEmitReadyReadOnMetaDataChange(true);
+//        setNetworkAccessManager(manager);
+//    }
 
-    // KWallet integration...
-    if (!flags || (flags & KWalletIntegration)) {
-        setWallet(new KWebWallet(0, (d->window ? d->window->winId() : 0)));
-    }
+//    // KWallet integration...
+//    if (!flags || (flags & KWalletIntegration)) {
+//        setWallet(new KWebWallet(0, (d->window ? d->window->winId() : 0)));
+//    }
 
     setActionIcon(action(Back), QIcon::fromTheme("go-previous"));
     setActionIcon(action(Forward), QIcon::fromTheme("go-next"));
@@ -264,21 +264,21 @@ KWebPage::KWebPage(QObject *parent, Integration flags)
     setActionIcon(action(Undo), QIcon::fromTheme("edit-undo"));
     setActionIcon(action(Redo), QIcon::fromTheme("edit-redo"));
     setActionIcon(action(SelectAll), QIcon::fromTheme("edit-select-all"));
-    setActionIcon(action(InspectElement), QIcon::fromTheme("view-process-all"));
-    setActionIcon(action(OpenLinkInNewWindow), QIcon::fromTheme("window-new"));
-    setActionIcon(action(OpenFrameInNewWindow), QIcon::fromTheme("window-new"));
-    setActionIcon(action(OpenImageInNewWindow), QIcon::fromTheme("window-new"));
-    setActionIcon(action(CopyLinkToClipboard), QIcon::fromTheme("edit-copy"));
-    setActionIcon(action(CopyImageToClipboard), QIcon::fromTheme("edit-copy"));
-    setActionIcon(action(ToggleBold), QIcon::fromTheme("format-text-bold"));
-    setActionIcon(action(ToggleItalic), QIcon::fromTheme("format-text-italic"));
-    setActionIcon(action(ToggleUnderline), QIcon::fromTheme("format-text-underline"));
-    setActionIcon(action(DownloadLinkToDisk), QIcon::fromTheme("document-save"));
-    setActionIcon(action(DownloadImageToDisk), QIcon::fromTheme("document-save"));
+//    setActionIcon(action(InspectElement), QIcon::fromTheme("view-process-all"));
+//    setActionIcon(action(OpenLinkInNewWindow), QIcon::fromTheme("window-new"));
+//    setActionIcon(action(OpenFrameInNewWindow), QIcon::fromTheme("window-new"));
+//    setActionIcon(action(OpenImageInNewWindow), QIcon::fromTheme("window-new"));
+//    setActionIcon(action(CopyLinkToClipboard), QIcon::fromTheme("edit-copy"));
+//    setActionIcon(action(CopyImageToClipboard), QIcon::fromTheme("edit-copy"));
+//    setActionIcon(action(ToggleBold), QIcon::fromTheme("format-text-bold"));
+//    setActionIcon(action(ToggleItalic), QIcon::fromTheme("format-text-italic"));
+//    setActionIcon(action(ToggleUnderline), QIcon::fromTheme("format-text-underline"));
+//    setActionIcon(action(DownloadLinkToDisk), QIcon::fromTheme("document-save"));
+//    setActionIcon(action(DownloadImageToDisk), QIcon::fromTheme("document-save"));
 
-    settings()->setWebGraphic(QWebSettings::MissingPluginGraphic, QIcon::fromTheme("preferences-plugin").pixmap(32, 32));
-    settings()->setWebGraphic(QWebSettings::MissingImageGraphic, QIcon::fromTheme("image-missing").pixmap(32, 32));
-    settings()->setWebGraphic(QWebSettings::DefaultFrameIconGraphic, QIcon::fromTheme("applications-internet").pixmap(32, 32));
+//    settings()->setWebGraphic(QWebSettings::MissingPluginGraphic, QIcon::fromTheme("preferences-plugin").pixmap(32, 32));
+//    settings()->setWebGraphic(QWebSettings::MissingImageGraphic, QIcon::fromTheme("image-missing").pixmap(32, 32));
+//    settings()->setWebGraphic(QWebSettings::DefaultFrameIconGraphic, QIcon::fromTheme("applications-internet").pixmap(32, 32));
 
     setActionShortcut(action(Back), KStandardShortcut::back());
     setActionShortcut(action(Forward), KStandardShortcut::forward());
@@ -297,41 +297,41 @@ KWebPage::~KWebPage()
     delete d;
 }
 
-bool KWebPage::isExternalContentAllowed() const
-{
-    KIO::AccessManager *manager = qobject_cast<KIO::AccessManager *>(networkAccessManager());
-    if (manager) {
-        return manager->isExternalContentAllowed();
-    }
-    return true;
-}
+//bool KWebPage::isExternalContentAllowed() const
+//{
+//    KIO::AccessManager *manager = qobject_cast<KIO::AccessManager *>(networkAccessManager());
+//    if (manager) {
+//        return manager->isExternalContentAllowed();
+//    }
+//    return true;
+//}
 
-KWebWallet *KWebPage::wallet() const
-{
-    return d->wallet;
-}
+//KWebWallet *KWebPage::wallet() const
+//{
+//    return d->wallet;
+//}
 
-void KWebPage::setAllowExternalContent(bool allow)
-{
-    KIO::AccessManager *manager = qobject_cast<KIO::AccessManager *>(networkAccessManager());
-    if (manager) {
-        manager->setExternalContentAllowed(allow);
-    }
-}
+//void KWebPage::setAllowExternalContent(bool allow)
+//{
+//    KIO::AccessManager *manager = qobject_cast<KIO::AccessManager *>(networkAccessManager());
+//    if (manager) {
+//        manager->setExternalContentAllowed(allow);
+//    }
+//}
 
-void KWebPage::setWallet(KWebWallet *wallet)
-{
-    // Delete the current wallet if this object is its parent...
-    if (d->wallet && this == d->wallet->parent()) {
-        delete d->wallet;
-    }
+//void KWebPage::setWallet(KWebWallet *wallet)
+//{
+//    // Delete the current wallet if this object is its parent...
+//    if (d->wallet && this == d->wallet->parent()) {
+//        delete d->wallet;
+//    }
 
-    d->wallet = wallet;
+//    d->wallet = wallet;
 
-    if (d->wallet) {
-        d->wallet->setParent(this);
-    }
-}
+//    if (d->wallet) {
+//        d->wallet->setParent(this);
+//    }
+//}
 
 void KWebPage::downloadRequest(const QNetworkRequest &request)
 {
@@ -350,107 +350,107 @@ void KWebPage::downloadUrl(const QUrl &url)
     downloadRequest(QNetworkRequest(url));
 }
 
-void KWebPage::downloadResponse(QNetworkReply *reply)
-{
-    Q_ASSERT(reply);
+//void KWebPage::downloadResponse(QNetworkReply *reply)
+//{
+//    Q_ASSERT(reply);
 
-    if (!reply) {
-        return;
-    }
+//    if (!reply) {
+//        return;
+//    }
 
-    // Put the job on hold only for the protocols we know about (read: http).
-    KIO::Integration::AccessManager::putReplyOnHold(reply);
+//    // Put the job on hold only for the protocols we know about (read: http).
+//    KIO::Integration::AccessManager::putReplyOnHold(reply);
 
-    QString mimeType;
-    KIO::MetaData metaData;
+//    QString mimeType;
+//    KIO::MetaData metaData;
 
-    if (handleReply(reply, &mimeType, &metaData)) {
-        return;
-    }
+//    if (handleReply(reply, &mimeType, &metaData)) {
+//        return;
+//    }
 
-    const QUrl replyUrl(reply->url());
+//    const QUrl replyUrl(reply->url());
 
-    // Ask KRun to handle the response when mimetype is unknown
-    if (mimeType.isEmpty()) {
-        (void)new KRun(replyUrl, d->windowWidget());
-        return;
-    }
+//    // Ask KRun to handle the response when mimetype is unknown
+//    if (mimeType.isEmpty()) {
+//        (void)new KRun(replyUrl, d->windowWidget());
+//        return;
+//    }
 
-    // Ask KRun::runUrl to handle the response when mimetype is inode/*
-    if (mimeType.startsWith(QL1S("inode/"), Qt::CaseInsensitive) &&
-            KRun::runUrl(replyUrl, mimeType, d->windowWidget(), false, false,
-                         metaData.value(QL1S("content-disposition-filename")))) {
-        return;
-    }
-}
+//    // Ask KRun::runUrl to handle the response when mimetype is inode/*
+//    if (mimeType.startsWith(QL1S("inode/"), Qt::CaseInsensitive) &&
+//            KRun::runUrl(replyUrl, mimeType, d->windowWidget(), false, false,
+//                         metaData.value(QL1S("content-disposition-filename")))) {
+//        return;
+//    }
+//}
 
-QString KWebPage::sessionMetaData(const QString &key) const
-{
-    QString value;
+//QString KWebPage::sessionMetaData(const QString &key) const
+//{
+//    QString value;
 
-    KIO::Integration::AccessManager *manager = qobject_cast<KIO::Integration::AccessManager *>(networkAccessManager());
-    if (manager) {
-        value = manager->sessionMetaData().value(key);
-    }
+//    KIO::Integration::AccessManager *manager = qobject_cast<KIO::Integration::AccessManager *>(networkAccessManager());
+//    if (manager) {
+//        value = manager->sessionMetaData().value(key);
+//    }
 
-    return value;
-}
+//    return value;
+//}
 
-QString KWebPage::requestMetaData(const QString &key) const
-{
-    QString value;
+//QString KWebPage::requestMetaData(const QString &key) const
+//{
+//    QString value;
 
-    KIO::Integration::AccessManager *manager = qobject_cast<KIO::Integration::AccessManager *>(networkAccessManager());
-    if (manager) {
-        value = manager->requestMetaData().value(key);
-    }
+//    KIO::Integration::AccessManager *manager = qobject_cast<KIO::Integration::AccessManager *>(networkAccessManager());
+//    if (manager) {
+//        value = manager->requestMetaData().value(key);
+//    }
 
-    return value;
-}
+//    return value;
+//}
 
-void KWebPage::setSessionMetaData(const QString &key, const QString &value)
-{
-    KIO::Integration::AccessManager *manager = qobject_cast<KIO::Integration::AccessManager *>(networkAccessManager());
-    if (manager) {
-        manager->sessionMetaData()[key] = value;
-    }
-}
+//void KWebPage::setSessionMetaData(const QString &key, const QString &value)
+//{
+//    KIO::Integration::AccessManager *manager = qobject_cast<KIO::Integration::AccessManager *>(networkAccessManager());
+//    if (manager) {
+//        manager->sessionMetaData()[key] = value;
+//    }
+//}
 
-void KWebPage::setRequestMetaData(const QString &key, const QString &value)
-{
-    KIO::Integration::AccessManager *manager = qobject_cast<KIO::Integration::AccessManager *>(networkAccessManager());
-    if (manager) {
-        manager->requestMetaData()[key] = value;
-    }
-}
+//void KWebPage::setRequestMetaData(const QString &key, const QString &value)
+//{
+//    KIO::Integration::AccessManager *manager = qobject_cast<KIO::Integration::AccessManager *>(networkAccessManager());
+//    if (manager) {
+//        manager->requestMetaData()[key] = value;
+//    }
+//}
 
-void KWebPage::removeSessionMetaData(const QString &key)
-{
-    KIO::Integration::AccessManager *manager = qobject_cast<KIO::Integration::AccessManager *>(networkAccessManager());
-    if (manager) {
-        manager->sessionMetaData().remove(key);
-    }
-}
+//void KWebPage::removeSessionMetaData(const QString &key)
+//{
+//    KIO::Integration::AccessManager *manager = qobject_cast<KIO::Integration::AccessManager *>(networkAccessManager());
+//    if (manager) {
+//        manager->sessionMetaData().remove(key);
+//    }
+//}
 
-void KWebPage::removeRequestMetaData(const QString &key)
-{
-    KIO::Integration::AccessManager *manager = qobject_cast<KIO::Integration::AccessManager *>(networkAccessManager());
-    if (manager) {
-        manager->requestMetaData().remove(key);
-    }
-}
+//void KWebPage::removeRequestMetaData(const QString &key)
+//{
+//    KIO::Integration::AccessManager *manager = qobject_cast<KIO::Integration::AccessManager *>(networkAccessManager());
+//    if (manager) {
+//        manager->requestMetaData().remove(key);
+//    }
+//}
 
-QString KWebPage::userAgentForUrl(const QUrl &_url) const
-{
-    const QUrl url(_url);
-    const QString userAgent = KProtocolManager::userAgentForHost((url.isLocalFile() ? QL1S("localhost") : url.host()));
+//QString KWebPage::userAgentForUrl(const QUrl &_url) const
+//{
+//    const QUrl url(_url);
+//    const QString userAgent = KProtocolManager::userAgentForHost((url.isLocalFile() ? QL1S("localhost") : url.host()));
 
-    if (userAgent == KProtocolManager::defaultUserAgent()) {
-        return QWebPage::userAgentForUrl(_url);
-    }
+//    if (userAgent == KProtocolManager::defaultUserAgent()) {
+//        return QWebPage::userAgentForUrl(_url);
+//    }
 
-    return userAgent;
-}
+//    return userAgent;
+//}
 
 static void setDisableCookieJarStorage(QNetworkAccessManager *manager, bool status)
 {
@@ -463,169 +463,169 @@ static void setDisableCookieJarStorage(QNetworkAccessManager *manager, bool stat
     }
 }
 
-bool KWebPage::acceptNavigationRequest(QWebFrame *frame, const QNetworkRequest &request, NavigationType type)
-{
-    // qDebug() << "url:" << request.url() << ", type:" << type << ", frame:" << frame;
+//bool KWebPage::acceptNavigationRequest(QWebFrame *frame, const QNetworkRequest &request, NavigationType type)
+//{
+//    // qDebug() << "url:" << request.url() << ", type:" << type << ", frame:" << frame;
 
-    if (frame && d->wallet && type == QWebPage::NavigationTypeFormSubmitted) {
-        d->wallet->saveFormData(frame);
-    }
+//    if (frame && d->wallet && type == QWebPage::NavigationTypeFormSubmitted) {
+//        d->wallet->saveFormData(frame);
+//    }
 
-    // Make sure nothing is cached when private browsing mode is enabled...
-    if (settings()->testAttribute(QWebSettings::PrivateBrowsingEnabled)) {
-        if (!d->inPrivateBrowsingMode) {
-            setDisableCookieJarStorage(networkAccessManager(), true);
-            setSessionMetaData(QL1S("no-cache"), QL1S("true"));
-            d->inPrivateBrowsingMode = true;
-        }
-    } else  {
-        if (d->inPrivateBrowsingMode) {
-            setDisableCookieJarStorage(networkAccessManager(), false);
-            removeSessionMetaData(QL1S("no-cache"));
-            d->inPrivateBrowsingMode = false;
-        }
-    }
+//    // Make sure nothing is cached when private browsing mode is enabled...
+//    if (settings()->testAttribute(QWebSettings::PrivateBrowsingEnabled)) {
+//        if (!d->inPrivateBrowsingMode) {
+//            setDisableCookieJarStorage(networkAccessManager(), true);
+//            setSessionMetaData(QL1S("no-cache"), QL1S("true"));
+//            d->inPrivateBrowsingMode = true;
+//        }
+//    } else  {
+//        if (d->inPrivateBrowsingMode) {
+//            setDisableCookieJarStorage(networkAccessManager(), false);
+//            removeSessionMetaData(QL1S("no-cache"));
+//            d->inPrivateBrowsingMode = false;
+//        }
+//    }
 
-    /*
-      If the navigation request is from the main frame, set the cross-domain
-      meta-data value to the current url for proper integration with KCookieJar...
-    */
-    if (frame == mainFrame() && type != QWebPage::NavigationTypeReload) {
-        setSessionMetaData(QL1S("cross-domain"), request.url().toString());
-    }
+//    /*
+//      If the navigation request is from the main frame, set the cross-domain
+//      meta-data value to the current url for proper integration with KCookieJar...
+//    */
+//    if (frame == mainFrame() && type != QWebPage::NavigationTypeReload) {
+//        setSessionMetaData(QL1S("cross-domain"), request.url().toString());
+//    }
 
-    return QWebPage::acceptNavigationRequest(frame, request, type);
-}
+//    return QWebPage::acceptNavigationRequest(frame, request, type);
+//}
 
-bool KWebPage::handleReply(QNetworkReply *reply, QString *contentType, KIO::MetaData *metaData)
-{
-    // Reply url...
-    const QUrl replyUrl(reply->url());
+//bool KWebPage::handleReply(QNetworkReply *reply, QString *contentType, KIO::MetaData *metaData)
+//{
+//    // Reply url...
+//    const QUrl replyUrl(reply->url());
 
-    // Get suggested file name...
-    const KIO::MetaData &data = reply->attribute(static_cast<QNetworkRequest::Attribute>(KIO::AccessManager::MetaData)).toMap();
-    const QString suggestedFileName = data.value(QL1S("content-disposition-filename"));
-    if (metaData) {
-        *metaData = data;
-    }
+//    // Get suggested file name...
+//    const KIO::MetaData &data = reply->attribute(static_cast<QNetworkRequest::Attribute>(KIO::AccessManager::MetaData)).toMap();
+//    const QString suggestedFileName = data.value(QL1S("content-disposition-filename"));
+//    if (metaData) {
+//        *metaData = data;
+//    }
 
-    // Get the mime-type...
-    QString mimeType;
-    extractMimeType(reply, mimeType);
-    if (contentType) {
-        *contentType = mimeType;
-    }
+//    // Get the mime-type...
+//    QString mimeType;
+//    extractMimeType(reply, mimeType);
+//    if (contentType) {
+//        *contentType = mimeType;
+//    }
 
-    // Let the calling function deal with handling empty or inode/* mimetypes...
-    if (mimeType.isEmpty() || mimeType.startsWith(QL1S("inode/"), Qt::CaseInsensitive)) {
-        return false;
-    }
+//    // Let the calling function deal with handling empty or inode/* mimetypes...
+//    if (mimeType.isEmpty() || mimeType.startsWith(QL1S("inode/"), Qt::CaseInsensitive)) {
+//        return false;
+//    }
 
-    // Convert executable text files to plain text...
-    if (KParts::BrowserRun::isTextExecutable(mimeType)) {
-        mimeType = QL1S("text/plain");
-    }
+//    // Convert executable text files to plain text...
+//    if (KParts::BrowserRun::isTextExecutable(mimeType)) {
+//        mimeType = QL1S("text/plain");
+//    }
 
-    //qDebug() << "Content-disposition:" << suggestedFileName;
-    //qDebug() << "Got unsupported content of type:" << mimeType << "URL:" << replyUrl;
-    //qDebug() << "Error code:" << reply->error() << reply->errorString();
+//    //qDebug() << "Content-disposition:" << suggestedFileName;
+//    //qDebug() << "Got unsupported content of type:" << mimeType << "URL:" << replyUrl;
+//    //qDebug() << "Error code:" << reply->error() << reply->errorString();
 
-    if (isReplyStatusOk(reply)) {
-        while (true) {
-            KParts::BrowserOpenOrSaveQuestion::Result result;
-            KParts::BrowserOpenOrSaveQuestion dlg(d->windowWidget(), replyUrl, mimeType);
-            dlg.setSuggestedFileName(suggestedFileName);
-            dlg.setFeatures(KParts::BrowserOpenOrSaveQuestion::ServiceSelection);
-            result = dlg.askOpenOrSave();
+//    if (isReplyStatusOk(reply)) {
+//        while (true) {
+//            KParts::BrowserOpenOrSaveQuestion::Result result;
+//            KParts::BrowserOpenOrSaveQuestion dlg(d->windowWidget(), replyUrl, mimeType);
+//            dlg.setSuggestedFileName(suggestedFileName);
+//            dlg.setFeatures(KParts::BrowserOpenOrSaveQuestion::ServiceSelection);
+//            result = dlg.askOpenOrSave();
 
-            switch (result) {
-            case KParts::BrowserOpenOrSaveQuestion::Open:
-                // Handle Post operations that return content...
-                if (reply->operation() == QNetworkAccessManager::PostOperation) {
-                    d->mimeType = mimeType;
-                    QFileInfo finfo(suggestedFileName.isEmpty() ? replyUrl.fileName() : suggestedFileName);
-                    QTemporaryFile tempFile(QDir::tempPath() + QLatin1String("/kwebpage_XXXXXX.") + finfo.suffix());
-                    tempFile.setAutoRemove(false);
-                    tempFile.open();
-                    const QUrl destUrl = QUrl::fromLocalFile(tempFile.fileName());
-                    KIO::Job *job = KIO::file_copy(replyUrl, destUrl, 0600, KIO::Overwrite);
-                    KJobWidgets::setWindow(job, d->windowWidget());
-                    job->ui()->setAutoErrorHandlingEnabled(true);
-                    connect(job, SIGNAL(result(KJob*)),
-                            this, SLOT(_k_copyResultToTempFile(KJob*)));
-                    return true;
-                }
+//            switch (result) {
+//            case KParts::BrowserOpenOrSaveQuestion::Open:
+//                // Handle Post operations that return content...
+//                if (reply->operation() == QNetworkAccessManager::PostOperation) {
+//                    d->mimeType = mimeType;
+//                    QFileInfo finfo(suggestedFileName.isEmpty() ? replyUrl.fileName() : suggestedFileName);
+//                    QTemporaryFile tempFile(QDir::tempPath() + QLatin1String("/kwebpage_XXXXXX.") + finfo.suffix());
+//                    tempFile.setAutoRemove(false);
+//                    tempFile.open();
+//                    const QUrl destUrl = QUrl::fromLocalFile(tempFile.fileName());
+//                    KIO::Job *job = KIO::file_copy(replyUrl, destUrl, 0600, KIO::Overwrite);
+//                    KJobWidgets::setWindow(job, d->windowWidget());
+//                    job->ui()->setAutoErrorHandlingEnabled(true);
+//                    connect(job, SIGNAL(result(KJob*)),
+//                            this, SLOT(_k_copyResultToTempFile(KJob*)));
+//                    return true;
+//                }
 
-                // Ask before running any executables...
-                if (KParts::BrowserRun::allowExecution(mimeType, replyUrl)) {
-                    KService::Ptr offer = dlg.selectedService();
-                    // HACK: The check below is necessary to break an infinite
-                    // recursion that occurs whenever this function is called as a result
-                    // of receiving content that can be rendered by the app using this engine.
-                    // For example a text/html header that containing a content-disposition
-                    // header is received by the app using this class.
-                    if (isMimeTypeAssociatedWithSelf(offer)) {
-                        reloadRequestWithoutDisposition(reply);
-                    } else {
-                        QList<QUrl> list;
-                        list.append(replyUrl);
-                        bool success = false;
-                        // qDebug() << "Suggested file name:" << suggestedFileName;
-                        if (offer) {
-                            success = KRun::run(*offer, list, d->windowWidget(), false, suggestedFileName);
-                        } else {
-                            success = KRun::displayOpenWithDialog(list, d->windowWidget(), false, suggestedFileName);
-                            if (!success) {
-                                break;
-                            }
-                        }
-                        // For non KIO apps and cancelled Open With dialog, remove slave on hold.
-                        if (!success || (offer && !offer->categories().contains(QL1S("KDE")))) {
-                            KIO::SimpleJob::removeOnHold(); // Remove any slave-on-hold...
-                        }
-                    }
-                    return true;
-                }
-                // TODO: Instead of silently failing when allowExecution fails, notify
-                // the user why the requested action cannot be fulfilled...
-                return false;
-            case KParts::BrowserOpenOrSaveQuestion::Save:
-                // Do not download local files...
-                if (!replyUrl.isLocalFile()) {
-                    QString downloadCmd(reply->property("DownloadManagerExe").toString());
-                    if (!downloadCmd.isEmpty()) {
-                        downloadCmd += QLatin1Char(' ');
-                        downloadCmd += KShell::quoteArg(replyUrl.url());
-                        if (!suggestedFileName.isEmpty()) {
-                            downloadCmd += QLatin1Char(' ');
-                            downloadCmd += KShell::quoteArg(suggestedFileName);
-                        }
-                        // qDebug() << "download command:" << downloadCmd;
-                        if (KRun::runCommand(downloadCmd, view())) {
-                            return true;
-                        }
-                    }
-                    if (!downloadResource(replyUrl, suggestedFileName, d->windowWidget())) {
-                        return true; // file dialog was cancelled, stop here
-                    }
-                }
-                return true;
-            case KParts::BrowserOpenOrSaveQuestion::Cancel:
-            default:
-                KIO::SimpleJob::removeOnHold(); // Remove any slave-on-hold...
-                return true;
-            }
-        }
-    } else {
-        KService::Ptr offer = KMimeTypeTrader::self()->preferredService(mimeType);
-        if (isMimeTypeAssociatedWithSelf(offer)) {
-            reloadRequestWithoutDisposition(reply);
-            return true;
-        }
-    }
+//                // Ask before running any executables...
+//                if (KParts::BrowserRun::allowExecution(mimeType, replyUrl)) {
+//                    KService::Ptr offer = dlg.selectedService();
+//                    // HACK: The check below is necessary to break an infinite
+//                    // recursion that occurs whenever this function is called as a result
+//                    // of receiving content that can be rendered by the app using this engine.
+//                    // For example a text/html header that containing a content-disposition
+//                    // header is received by the app using this class.
+//                    if (isMimeTypeAssociatedWithSelf(offer)) {
+//                        reloadRequestWithoutDisposition(reply);
+//                    } else {
+//                        QList<QUrl> list;
+//                        list.append(replyUrl);
+//                        bool success = false;
+//                        // qDebug() << "Suggested file name:" << suggestedFileName;
+//                        if (offer) {
+//                            success = KRun::run(*offer, list, d->windowWidget(), false, suggestedFileName);
+//                        } else {
+//                            success = KRun::displayOpenWithDialog(list, d->windowWidget(), false, suggestedFileName);
+//                            if (!success) {
+//                                break;
+//                            }
+//                        }
+//                        // For non KIO apps and cancelled Open With dialog, remove slave on hold.
+//                        if (!success || (offer && !offer->categories().contains(QL1S("KDE")))) {
+//                            KIO::SimpleJob::removeOnHold(); // Remove any slave-on-hold...
+//                        }
+//                    }
+//                    return true;
+//                }
+//                // TODO: Instead of silently failing when allowExecution fails, notify
+//                // the user why the requested action cannot be fulfilled...
+//                return false;
+//            case KParts::BrowserOpenOrSaveQuestion::Save:
+//                // Do not download local files...
+//                if (!replyUrl.isLocalFile()) {
+//                    QString downloadCmd(reply->property("DownloadManagerExe").toString());
+//                    if (!downloadCmd.isEmpty()) {
+//                        downloadCmd += QLatin1Char(' ');
+//                        downloadCmd += KShell::quoteArg(replyUrl.url());
+//                        if (!suggestedFileName.isEmpty()) {
+//                            downloadCmd += QLatin1Char(' ');
+//                            downloadCmd += KShell::quoteArg(suggestedFileName);
+//                        }
+//                        // qDebug() << "download command:" << downloadCmd;
+//                        if (KRun::runCommand(downloadCmd, view())) {
+//                            return true;
+//                        }
+//                    }
+//                    if (!downloadResource(replyUrl, suggestedFileName, d->windowWidget())) {
+//                        return true; // file dialog was cancelled, stop here
+//                    }
+//                }
+//                return true;
+//            case KParts::BrowserOpenOrSaveQuestion::Cancel:
+//            default:
+//                KIO::SimpleJob::removeOnHold(); // Remove any slave-on-hold...
+//                return true;
+//            }
+//        }
+//    } else {
+//        KService::Ptr offer = KMimeTypeTrader::self()->preferredService(mimeType);
+//        if (isMimeTypeAssociatedWithSelf(offer)) {
+//            reloadRequestWithoutDisposition(reply);
+//            return true;
+//        }
+//    }
 
-    return false;
-}
+//    return false;
+//}
 
 #include "moc_kwebpage.cpp"
 

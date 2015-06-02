@@ -32,8 +32,7 @@
 #include <QWidget>
 #include <QtCore/QtGlobal>
 
-class QWebFrame;
-class QWebPage;
+class QWebEnginePage;
 
 /**
  * @short A class that provides KWallet integration for QWebFrame.

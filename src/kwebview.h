@@ -28,7 +28,7 @@
 
 #include <kdewebkit_export.h>
 
-#include <QWebView>
+#include <QWebEngineView>
 
 class QUrl;
 template<class T> class KWebViewPrivate;
@@ -54,10 +54,10 @@ template<class T> class KWebViewPrivate;
  * @author Dawit Alemayehu <adawit @ kde.org>
  * @since 4.4
  */
-class KDEWEBKIT_EXPORT KWebView : public QWebView
+class KDEWEBKIT_EXPORT KWebView : public QWebEngineView
 {
     Q_OBJECT
-    Q_PROPERTY(bool externalContentAllowed READ isExternalContentAllowed WRITE setAllowExternalContent)
+//    Q_PROPERTY(bool externalContentAllowed READ isExternalContentAllowed WRITE setAllowExternalContent)
 public:
     /**
      * Constructs a KWebView object with parent @p parent.
@@ -78,27 +78,27 @@ public:
      */
     ~KWebView();
 
-    /**
-     * Returns true if access to remote content is allowed.
-     *
-     * By default access to remote content is allowed.
-     *
-     * @see setAllowExternalContent()
-     * @see KWebPage::isExternalContentAllowed()
-     */
-    bool isExternalContentAllowed() const;
+//    /**
+//     * Returns true if access to remote content is allowed.
+//     *
+//     * By default access to remote content is allowed.
+//     *
+//     * @see setAllowExternalContent()
+//     * @see KWebPage::isExternalContentAllowed()
+//     */
+//    bool isExternalContentAllowed() const;
 
-    /**
-     * Set @p allow to false if you want to prevent access to remote content.
-     *
-     * If this function is set to false only resources on the local system
-     * can be accessed through this class. By default fetching external content
-     * is allowed.
-     *
-     * @see isExternalContentAllowed()
-     * @see KWebPage::setAllowExternalContent(bool)
-     */
-    void setAllowExternalContent(bool allow);
+//    /**
+//     * Set @p allow to false if you want to prevent access to remote content.
+//     *
+//     * If this function is set to false only resources on the local system
+//     * can be accessed through this class. By default fetching external content
+//     * is allowed.
+//     *
+//     * @see isExternalContentAllowed()
+//     * @see KWebPage::setAllowExternalContent(bool)
+//     */
+//    void setAllowExternalContent(bool allow);
 
 Q_SIGNALS:
     /**

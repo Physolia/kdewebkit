@@ -31,7 +31,7 @@
 #include <QMouseEvent>
 
 KWebView::KWebView(QWidget *parent, bool createCustomPage)
-    : QWebView(parent), d(new KWebViewPrivate<KWebView>(this))
+    : QWebEngineView(parent), d(new KWebViewPrivate<KWebView>(this))
 {
     if (createCustomPage) {
         setPage(new KWebPage(this));
@@ -43,22 +43,22 @@ KWebView::~KWebView()
     delete d;
 }
 
-bool KWebView::isExternalContentAllowed() const
-{
-    return d->isExternalContentAllowed();
-}
+//bool KWebView::isExternalContentAllowed() const
+//{
+//    return d->isExternalContentAllowed();
+//}
 
-void KWebView::setAllowExternalContent(bool allow)
-{
-    d->setAllowExternalContent(allow);
-}
+//void KWebView::setAllowExternalContent(bool allow)
+//{
+//    d->setAllowExternalContent(allow);
+//}
 
 void KWebView::wheelEvent(QWheelEvent *event)
 {
     if (d->wheelEvent(event->delta())) {
         event->accept();
     } else {
-        QWebView::wheelEvent(event);
+        QWebEngineView::wheelEvent(event);
     }
 }
 
@@ -66,16 +66,16 @@ void KWebView::mousePressEvent(QMouseEvent *event)
 {
     d->pressedButtons = event->buttons();
     d->keyboardModifiers = event->modifiers();
-    QWebView::mousePressEvent(event);
+    QWebEngineView::mousePressEvent(event);
 }
 
 void KWebView::mouseReleaseEvent(QMouseEvent *event)
 {
-    if (d->mouseReleased(event->pos()) || d->handleUrlPasteFromClipboard(event)) {
-        event->accept();
-        return;
-    }
+//    if (d->mouseReleased(event->pos()) || d->handleUrlPasteFromClipboard(event)) {
+//        event->accept();
+//        return;
+//    }
 
-    QWebView::mouseReleaseEvent(event);
+    QWebEngineView::mouseReleaseEvent(event);
 }
 

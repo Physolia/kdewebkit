@@ -30,8 +30,6 @@
 #include <QtCore/QEvent>
 #include <QClipboard>
 #include <QApplication>
-#include <QWebFrame>
-#include <QWebElement>
 
 #include <kurifilter.h>
 
@@ -50,23 +48,23 @@ public:
     {
     }
 
-    bool isExternalContentAllowed()
-    {
-        KWebPage *webPage = qobject_cast<KWebPage *>(q->page());
-        if (webPage) {
-            return webPage->isExternalContentAllowed();
-        }
+//    bool isExternalContentAllowed()
+//    {
+//        KWebPage *webPage = qobject_cast<KWebPage *>(q->page());
+//        if (webPage) {
+//            return webPage->isExternalContentAllowed();
+//        }
 
-        return false;
-    }
+//        return false;
+//    }
 
-    void setAllowExternalContent(bool allow)
-    {
-        KWebPage *webPage = qobject_cast<KWebPage *>(q->page());
-        if (webPage) {
-            webPage->setAllowExternalContent(allow);
-        }
-    }
+//    void setAllowExternalContent(bool allow)
+//    {
+//        KWebPage *webPage = qobject_cast<KWebPage *>(q->page());
+//        if (webPage) {
+//            webPage->setAllowExternalContent(allow);
+//        }
+//    }
 
     bool wheelEvent(int delta)
     {
@@ -80,77 +78,77 @@ public:
         return false;
     }
 
-    bool mouseReleased(const QPoint &pos)
-    {
-        hitTest = q->page()->mainFrame()->hitTestContent(pos);
-        const QUrl url = hitTest.linkUrl();
+//    bool mouseReleased(const QPoint &pos)
+//    {
+//        hitTest = q->page()->mainFrame()->hitTestContent(pos);
+//        const QUrl url = hitTest.linkUrl();
 
-        if (!url.isEmpty()) {
-            if ((pressedButtons & Qt::MidButton) ||
-                    ((pressedButtons & Qt::LeftButton) && (keyboardModifiers & Qt::ControlModifier))) {
-                emit q->linkMiddleOrCtrlClicked(url);
-                return true;
-            }
+//        if (!url.isEmpty()) {
+//            if ((pressedButtons & Qt::MidButton) ||
+//                    ((pressedButtons & Qt::LeftButton) && (keyboardModifiers & Qt::ControlModifier))) {
+//                emit q->linkMiddleOrCtrlClicked(url);
+//                return true;
+//            }
 
-            if ((pressedButtons & Qt::LeftButton) && (keyboardModifiers & Qt::ShiftModifier)) {
-                emit q->linkShiftClicked(url);
-                return true;
-            }
-        }
+//            if ((pressedButtons & Qt::LeftButton) && (keyboardModifiers & Qt::ShiftModifier)) {
+//                emit q->linkShiftClicked(url);
+//                return true;
+//            }
+//        }
 
-        return false;
-    }
+//        return false;
+//    }
 
-    bool handleUrlPasteFromClipboard(QEvent *event)
-    {
-        QWebPage *page = q->page();
-        if ((pressedButtons & Qt::MidButton) && page) {
+//    bool handleUrlPasteFromClipboard(QEvent *event)
+//    {
+//        QWebPage *page = q->page();
+//        if ((pressedButtons & Qt::MidButton) && page) {
 
-            // WORKAROUND: Let the page handle the event first so that middle clicking
-            // on scroll bars does not cause navigation to a url that might have been
-            // copied into the selection clipboard.
-            page->event(event);
-            if (event->isAccepted()) {
-                return true;
-            }
+//            // WORKAROUND: Let the page handle the event first so that middle clicking
+//            // on scroll bars does not cause navigation to a url that might have been
+//            // copied into the selection clipboard.
+//            page->event(event);
+//            if (event->isAccepted()) {
+//                return true;
+//            }
 
-            if (!hitTest.linkUrl().isValid() && !hitTest.isContentEditable() && !page->isModified()) {
-                QString subType(QL1S("plain"));
-                const QString clipboardText = QApplication::clipboard()->text(subType, QClipboard::Selection);
-                if (!clipboardText.isEmpty()) {
-                    KUriFilterData data(clipboardText.left(250).trimmed());
-                    data.setCheckForExecutables(false); // don't allow executables...
-                    if (KUriFilter::self()->filterUri(data, QStringList(QL1S("kshorturifilter")))) {
-                        switch (data.uriType()) {
-                        case KUriFilterData::LocalFile:
-                        case KUriFilterData::LocalDir:
-                        case KUriFilterData::NetProtocol:
-                            emit q->selectionClipboardUrlPasted(data.uri(), QString());
-#ifndef KDEWEBKIT_NO_DEPRECATED
-                            emit q->selectionClipboardUrlPasted(data.uri());
-#endif
-                            return true;
-                        default:
-                            break;
-                        }
-                    } else if (KUriFilter::self()->filterSearchUri(data, KUriFilter::NormalTextFilter)) {
-                        emit q->selectionClipboardUrlPasted(data.uri(), clipboardText);
-#ifndef KDEWEBKIT_NO_DEPRECATED
-                        emit q->selectionClipboardUrlPasted(data.uri());
-#endif
-                        return true;
-                    }
-                }
-            }
-        }
+//            if (!hitTest.linkUrl().isValid() && !hitTest.isContentEditable() && !page->isModified()) {
+//                QString subType(QL1S("plain"));
+//                const QString clipboardText = QApplication::clipboard()->text(subType, QClipboard::Selection);
+//                if (!clipboardText.isEmpty()) {
+//                    KUriFilterData data(clipboardText.left(250).trimmed());
+//                    data.setCheckForExecutables(false); // don't allow executables...
+//                    if (KUriFilter::self()->filterUri(data, QStringList(QL1S("kshorturifilter")))) {
+//                        switch (data.uriType()) {
+//                        case KUriFilterData::LocalFile:
+//                        case KUriFilterData::LocalDir:
+//                        case KUriFilterData::NetProtocol:
+//                            emit q->selectionClipboardUrlPasted(data.uri(), QString());
+//#ifndef KDEWEBKIT_NO_DEPRECATED
+//                            emit q->selectionClipboardUrlPasted(data.uri());
+//#endif
+//                            return true;
+//                        default:
+//                            break;
+//                        }
+//                    } else if (KUriFilter::self()->filterSearchUri(data, KUriFilter::NormalTextFilter)) {
+//                        emit q->selectionClipboardUrlPasted(data.uri(), clipboardText);
+//#ifndef KDEWEBKIT_NO_DEPRECATED
+//                        emit q->selectionClipboardUrlPasted(data.uri());
+//#endif
+//                        return true;
+//                    }
+//                }
+//            }
+//        }
 
-        return false;
-    }
+//        return false;
+//    }
 
     T *q;
     Qt::KeyboardModifiers keyboardModifiers;
     Qt::MouseButtons pressedButtons;
-    QWebHitTestResult hitTest;
+//    QWebHitTestResult hitTest;
 };
 
 #endif  // KWEBVIEW_P_H
