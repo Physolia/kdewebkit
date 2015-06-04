@@ -24,36 +24,37 @@
  *
  */
 
-#include "kwebview.h"
-#include "kwebview_p.h"
-#include "kwebpage.h"
+#include "kwebengineview.h"
+#include "kwebengineview_p.h"
+#include "kwebenginepage.h"
 
 #include <QMouseEvent>
 
-KWebView::KWebView(QWidget *parent, bool createCustomPage)
-    : QWebEngineView(parent), d(new KWebViewPrivate<KWebView>(this))
+KWebEngineView::KWebEngineView(QWidget *parent, bool createCustomPage)
+    : QWebEngineView(parent), d(new KWebEngineViewPrivate<KWebEngineView>(this))
 {
     if (createCustomPage) {
-        setPage(new KWebPage(this));
+        setPage(new KWebEnginePage(this));
     }
 }
 
-KWebView::~KWebView()
+KWebEngineView::~KWebEngineView()
 {
     delete d;
 }
 
-//bool KWebView::isExternalContentAllowed() const
+//bool KWebEngineView::isExternalContentAllowed() const
 //{
 //    return d->isExternalContentAllowed();
 //}
 
-//void KWebView::setAllowExternalContent(bool allow)
+//void KWebEngineView::setAllowExternalContent(bool allow)
 //{
 //    d->setAllowExternalContent(allow);
 //}
 
-void KWebView::wheelEvent(QWheelEvent *event)
+//TODO: Work around that QWebEngineView doesn't handle mouse events
+void KWebEngineView::wheelEvent(QWheelEvent *event)
 {
     if (d->wheelEvent(event->delta())) {
         event->accept();
@@ -62,14 +63,14 @@ void KWebView::wheelEvent(QWheelEvent *event)
     }
 }
 
-void KWebView::mousePressEvent(QMouseEvent *event)
+void KWebEngineView::mousePressEvent(QMouseEvent *event)
 {
     d->pressedButtons = event->buttons();
     d->keyboardModifiers = event->modifiers();
     QWebEngineView::mousePressEvent(event);
 }
 
-void KWebView::mouseReleaseEvent(QMouseEvent *event)
+void KWebEngineView::mouseReleaseEvent(QMouseEvent *event)
 {
 //    if (d->mouseReleased(event->pos()) || d->handleUrlPasteFromClipboard(event)) {
 //        event->accept();

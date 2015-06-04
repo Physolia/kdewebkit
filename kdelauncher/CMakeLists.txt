@@ -22,6 +22,6 @@ include_directories(${CMAKE_SOURCE_DIR}/../src)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 add_executable(kdelauncher main.cpp )
-target_link_libraries(kdelauncher KF5WebKit)
+target_link_libraries(kdelauncher KF5WebEngine)
 target_link_libraries(kdelauncher Qt5::Core Qt5::Gui Qt5::Widgets Qt5::WebEngineWidgets Qt5::UiTools KF5::KIOCore KF5::KIOWidgets KF5::I18n KF5::KDELibs4Support)
 set_target_properties(kdelauncher PROPERTIES CXX_STANDARD 11 CXX_STANDARD_REQUIRED ON)

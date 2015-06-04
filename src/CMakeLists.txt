@@ -1,41 +1,38 @@
-set(KDEWebKit_LIB_SRCS
-    kwebpage.cpp
-    kwebview.cpp
+set(KDEWebEngine_LIB_SRCS
+    kwebenginepage.cpp
+    kwebengineview.cpp
 )
 
-add_library(KF5WebKit ${KDEWebKit_LIB_SRCS})
-generate_export_header(KF5WebKit BASE_NAME KDEWebKit)
-add_library(KF5::WebKit ALIAS KF5WebKit)
+add_library(KF5WebEngine ${KDEWebEngine_LIB_SRCS})
+generate_export_header(KF5WebEngine BASE_NAME KDEWebEngine)
+add_library(KF5::WebEngine ALIAS KF5WebEngine)
 
-target_include_directories(KF5WebKit INTERFACE "$<INSTALL_INTERFACE:${KDE_INSTALL_INCLUDEDIR_KF5}/KDEWebKit>")
+target_include_directories(KF5WebEngine INTERFACE "$<INSTALL_INTERFACE:${KDE_INSTALL_INCLUDEDIR_KF5}/KDEWebEngine>")
 
-target_link_libraries(KF5WebKit PUBLIC Qt5::WebEngineWidgets
+target_link_libraries(KF5WebEngine PUBLIC Qt5::WebEngineWidgets
                                 PRIVATE KF5::CoreAddons KF5::Wallet KF5::KIOWidgets KF5::Parts)
 
-set_target_properties(KF5WebKit PROPERTIES VERSION   ${KDEWEBKIT_VERSION_STRING}
-                                           SOVERSION ${KDEWEBKIT_SOVERSION}
-                                           EXPORT_NAME WebKit
+set_target_properties(KF5WebEngine PROPERTIES VERSION   ${KDEWEBENGINE_VERSION_STRING}
+                                           SOVERSION ${KDEWEBENGINE_SOVERSION}
+                                           EXPORT_NAME WebEngine
 )
 
-ecm_generate_headers(KDEWebKit_HEADERS
+ecm_generate_headers(KDEWebEngine_HEADERS
   HEADER_NAMES
-  KWebWallet
-  KGraphicsWebView
-  KWebPluginFactory
-  KWebPage
-  KWebView
+  KWebEnginePage
+  KWebEngineView
 
-  REQUIRED_HEADERS KDEWebKit_HEADERS
+  REQUIRED_HEADERS KDEWebEngine_HEADERS
 )
 
-install(TARGETS KF5WebKit EXPORT KF5WebKitTargets ${KF5_INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS KF5WebEngine EXPORT KF5WebEngineTargets ${KF5_INSTALL_TARGETS_DEFAULT_ARGS})
 install(FILES
-  ${CMAKE_CURRENT_BINARY_DIR}/kdewebkit_export.h
-  ${KDEWebKit_HEADERS}
-  DESTINATION ${KDE_INSTALL_INCLUDEDIR_KF5}/KDEWebKit COMPONENT Devel
+  ${CMAKE_CURRENT_BINARY_DIR}/kdewebengine_export.h
+  ${KDEWebEngine_HEADERS}
+  DESTINATION ${KDE_INSTALL_INCLUDEDIR_KF5}/KDEWebEngine COMPONENT Devel
 )
 
 
 include(ECMGeneratePriFile)
-ecm_generate_pri_file(BASE_NAME KDEWebKit LIB_NAME KF5WebKit DEPS "webkitwidgets" FILENAME_VAR PRI_FILENAME INCLUDE_INSTALL_DIR ${KDE_INSTALL_INCLUDEDIR_KF5}/KDEWebKit)
+ecm_generate_pri_file(BASE_NAME KDEWebEngine LIB_NAME KF5WebEngine DEPS "webenginewidgets" FILENAME_VAR PRI_FILENAME INCLUDE_INSTALL_DIR ${KDE_INSTALL_INCLUDEDIR_KF5}/KDEWebEngine)
 install(FILES ${PRI_FILENAME} DESTINATION ${ECM_MKSPECS_INSTALL_DIR})

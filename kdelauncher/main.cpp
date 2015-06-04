@@ -29,7 +29,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "../src/kwebview.h"
+#include "../src/kwebengineview.h"
 
 #include <KDE/KApplication>
 #include <KDE/KAboutData>
@@ -74,7 +74,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 public:
     MainWindow(const QString& url = QString()): currentZoom(100) {
-        view = new KWebView(this);
+        view = new KWebEngineView(this);
         setCentralWidget(view);
 
         connect(view, SIGNAL(loadFinished(bool)),

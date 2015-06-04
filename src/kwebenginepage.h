@@ -22,8 +22,8 @@
  * Boston, MA 02110-1301, USA.
  *
  */
-#ifndef KWEBPAGE_H
-#define KWEBPAGE_H
+#ifndef KWEBENGINEPAGE_H
+#define KWEBENGINEPAGE_H
 
 #include <kdewebkit_export.h>
 
@@ -39,13 +39,13 @@ class Job;
 }
 
 /**
- * @short An enhanced QWebPage that provides integration with KDE Frameworks.
+ * @short An enhanced QWebEnginePage that provides integration with KDE Frameworks.
  *
  * This is a convenience class that provides full integration with KDE
  * frameworks technologies such as KIO for network request handling, KCookiejar
  * for cookie handling, KParts for embedding non-html content and KWallet for
  * storing form data.  It also sets standard icons for many of the actions
- * provided by QWebPage.
+ * provided by QWebEnginePage.
  *
  * Most of this integration happens behind the scenes.  If you want KWallet
  * integration, however, you will have to provide a mechanism for deciding
@@ -56,8 +56,8 @@ class Job;
  * whether they want to save the form data.  If you do not do this, no form
  * data will be saved.
  *
- * KWebPage will also not automatically load form data for you.  You should
- * connect to QWebPage::loadFinished and, if the page was loaded successfully,
+ * KWebEnginePage will also not automatically load form data for you.  You should
+ * connect to QWebEnginePage::loadFinished and, if the page was loaded successfully,
  * call
  * @code
  * page->wallet()->fillFormData(page->mainFrame());
@@ -72,7 +72,7 @@ class Job;
  * @since 4.4
  */
 
-class KDEWEBKIT_EXPORT KWebPage : public QWebEnginePage
+class KDEWEBKIT_EXPORT KWebEnginePage : public QWebEnginePage
 {
     Q_OBJECT
     Q_FLAGS(Integration)
@@ -84,7 +84,7 @@ public:
     enum IntegrationFlags {
         /**
          * Provide only very basic integration such as using KDE icons for the
-         * actions provided by QWebPage.
+         * actions provided by QWebEnginePage.
          */
         NoIntegration = 0x01,
         /**
@@ -109,7 +109,7 @@ public:
     Q_DECLARE_FLAGS(Integration, IntegrationFlags)
 
     /**
-     * Constructs a KWebPage with parent @p parent.
+     * Constructs a KWebEnginePage with parent @p parent.
      *
      * Note that if no integration flags are set (the default), all integration
      * options are activated.  If you inherit from this class you can use the
@@ -120,12 +120,12 @@ public:
      * @see KIO::Integration::AccessManager
      * @see wallet() and setWallet()
      */
-    explicit KWebPage(QObject *parent = 0, Integration flags = Integration());
+    explicit KWebEnginePage(QObject *parent = 0, Integration flags = Integration());
 
     /**
-     * Destroys the KWebPage.
+     * Destroys the KWebEnginePage.
      */
-    ~KWebPage();
+    ~KWebEnginePage();
 
 //    /**
 //     * Whether access to remote content is permitted.
@@ -170,8 +170,8 @@ public:
 //    /**
 //     * Set the @ref KWebWallet that is used to store form data.
 //     *
-//     * This KWebPage will take ownership of @p wallet, so that the wallet
-//     * is deleted when the KWebPage is deleted.  If you do not want that
+//     * This KWebEnginePage will take ownership of @p wallet, so that the wallet
+//     * is deleted when the KWebEnginePage is deleted.  If you do not want that
 //     * to happen, you should call setParent() on @p wallet after calling
 //     * this function.
 //     *
@@ -313,11 +313,11 @@ protected:
 //     * integration with KProtocolManager.
 //     *
 //     * If a special user-agent has been configured for the host indicated by
-//     * @p url, that user-agent will be returned.  Otherwise, QWebPage's
+//     * @p url, that user-agent will be returned.  Otherwise, QWebEnginePage's
 //     * default user agent is returned.
 //     *
 //     * @see KProtocolManager::userAgentForHost.
-//     * @see QWebPage::userAgentForUrl.
+//     * @see QWebEnginePage::userAgentForUrl.
 //     */
 //    QString userAgentForUrl(const QUrl &url) const Q_DECL_OVERRIDE;
 
@@ -330,9 +330,9 @@ protected:
 //     *
 //     * If you do override acceptNavigationRequest and call this method,
 //     * however, be aware of the effect of the page's linkDelegationPolicy on
-//     * how * QWebPage::acceptNavigationRequest behaves.
+//     * how * QWebEnginePage::acceptNavigationRequest behaves.
 //     *
-//     * @see QWebPage::acceptNavigationRequest
+//     * @see QWebEnginePage::acceptNavigationRequest
 //     */
 //    bool acceptNavigationRequest(QWebFrame *frame, const QNetworkRequest &request, NavigationType type) Q_DECL_OVERRIDE;
 
@@ -355,13 +355,13 @@ protected:
 //    bool handleReply(QNetworkReply *reply, QString *contentType = 0, KIO::MetaData *metaData = 0);
 
 private:
-    class KWebPagePrivate;
-    KWebPagePrivate *const d;
+    class KWebEnginePagePrivate;
+    KWebEnginePagePrivate *const d;
     Q_PRIVATE_SLOT(d, void _k_copyResultToTempFile(KJob *))
     Q_PRIVATE_SLOT(d, void _k_receivedContentType(KIO::Job *, const QString &))
     Q_PRIVATE_SLOT(d, void _k_contentTypeCheckFailed(KJob *))
 };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(KWebPage::Integration)
+Q_DECLARE_OPERATORS_FOR_FLAGS(KWebEnginePage::Integration)
 
-#endif // KWEBPAGE_H
+#endif // KWEBENGINEPAGE_H

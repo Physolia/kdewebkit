@@ -24,8 +24,8 @@
  *
  */
 
-#ifndef KWEBVIEW_P_H
-#define KWEBVIEW_P_H
+#ifndef KWEBENGINEVIEW_P_H
+#define KWEBENGINEVIEW_P_H
 
 #include <QtCore/QEvent>
 #include <QClipboard>
@@ -33,15 +33,15 @@
 
 #include <kurifilter.h>
 
-#include "kwebpage.h"
+#include "kwebenginepage.h"
 
 #define QL1S(x)   QLatin1String(x)
 
 template <class T>
-class KWebViewPrivate
+class KWebEngineViewPrivate
 {
 public:
-    KWebViewPrivate(T *parent)
+    KWebEngineViewPrivate(T *parent)
         : q(parent),
           keyboardModifiers(Qt::NoModifier),
           pressedButtons(Qt::NoButton)
@@ -50,7 +50,7 @@ public:
 
 //    bool isExternalContentAllowed()
 //    {
-//        KWebPage *webPage = qobject_cast<KWebPage *>(q->page());
+//        KWebEnginePage *webPage = qobject_cast<KWebEnginePage *>(q->page());
 //        if (webPage) {
 //            return webPage->isExternalContentAllowed();
 //        }
@@ -60,7 +60,7 @@ public:
 
 //    void setAllowExternalContent(bool allow)
 //    {
-//        KWebPage *webPage = qobject_cast<KWebPage *>(q->page());
+//        KWebEnginePage *webPage = qobject_cast<KWebEnginePage *>(q->page());
 //        if (webPage) {
 //            webPage->setAllowExternalContent(allow);
 //        }
@@ -151,4 +151,4 @@ public:
 //    QWebHitTestResult hitTest;
 };
 
-#endif  // KWEBVIEW_P_H
+#endif  // KWEBENGINEVIEW_P_H

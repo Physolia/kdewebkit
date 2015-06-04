@@ -23,15 +23,15 @@
  * Boston, MA 02110-1301, USA.
  *
  */
-#ifndef KWEBVIEW_H
-#define KWEBVIEW_H
+#ifndef KWEBENGINEVIEW_H
+#define KWEBENGINEVIEW_H
 
 #include <kdewebkit_export.h>
 
 #include <QWebEngineView>
 
 class QUrl;
-template<class T> class KWebViewPrivate;
+template<class T> class KWebEngineViewPrivate;
 
 /**
  * @short A re-implementation of QWebView that provides integration with KDE
@@ -54,13 +54,13 @@ template<class T> class KWebViewPrivate;
  * @author Dawit Alemayehu <adawit @ kde.org>
  * @since 4.4
  */
-class KDEWEBKIT_EXPORT KWebView : public QWebEngineView
+class KDEWEBKIT_EXPORT KWebEngineView : public QWebEngineView
 {
     Q_OBJECT
 //    Q_PROPERTY(bool externalContentAllowed READ isExternalContentAllowed WRITE setAllowExternalContent)
 public:
     /**
-     * Constructs a KWebView object with parent @p parent.
+     * Constructs a KWebEngineView object with parent @p parent.
      *
      * Set @p createCustomPage to false to prevent the creation of a
      * @ref KWebPage object for KDE frameworks integration. Doing so allows you
@@ -71,12 +71,12 @@ public:
      * @param createCustomPage  if @c true, the view's page is set to an
      *                          instance of KWebPage
      */
-    explicit KWebView(QWidget *parent = 0, bool createCustomPage = true);
+    explicit KWebEngineView(QWidget *parent = 0, bool createCustomPage = true);
 
     /**
-     * Destroys the KWebView.
+     * Destroys the KWebEngineView.
      */
-    ~KWebView();
+    ~KWebEngineView();
 
 //    /**
 //     * Returns true if access to remote content is allowed.
@@ -201,8 +201,8 @@ protected:
     void mouseReleaseEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
 
 private:
-    friend class KWebViewPrivate<KWebView>;
-    KWebViewPrivate<KWebView> *const d;
+    friend class KWebEngineViewPrivate<KWebEngineView>;
+    KWebEngineViewPrivate<KWebEngineView> *const d;
 };
 
-#endif // KWEBVIEW_H
+#endif // KWEBENGINEVIEW_H

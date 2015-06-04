@@ -24,7 +24,7 @@
  */
 
 // Own
-#include "kwebpage.h"
+#include "kwebenginepage.h"
 //#include "kwebwallet.h"
 
 // Local
@@ -161,10 +161,10 @@ static bool isReplyStatusOk(const QNetworkReply *reply)
     return true;
 }
 
-class KWebPage::KWebPagePrivate
+class KWebEnginePage::KWebEnginePagePrivate
 {
 public:
-    KWebPagePrivate(KWebPage *page)
+    KWebEnginePagePrivate(KWebEnginePage *page)
         : q(page)
         , inPrivateBrowsingMode(false)
     {
@@ -207,7 +207,7 @@ public:
         }
     }
 
-    KWebPage *q;
+    KWebEnginePage *q;
     QPointer<QWidget> window;
     QString mimeType;
 //    QPointer<KWebWallet> wallet;
@@ -228,8 +228,8 @@ static void setActionShortcut(QAction *action, const QList<QKeySequence> &shortc
     }
 }
 
-KWebPage::KWebPage(QObject *parent, Integration flags)
-    : QWebEnginePage(parent), d(new KWebPagePrivate(this))
+KWebEnginePage::KWebEnginePage(QObject *parent, Integration flags)
+    : QWebEnginePage(parent), d(new KWebEnginePagePrivate(this))
 {
 //    // KDE KParts integration for <embed> tag...
 //    if (!flags || (flags & KPartsIntegration)) {
@@ -292,12 +292,12 @@ KWebPage::KWebPage(QObject *parent, Integration flags)
     setActionShortcut(action(SelectAll), KStandardShortcut::selectAll());
 }
 
-KWebPage::~KWebPage()
+KWebEnginePage::~KWebEnginePage()
 {
     delete d;
 }
 
-//bool KWebPage::isExternalContentAllowed() const
+//bool KWebEnginePage::isExternalContentAllowed() const
 //{
 //    KIO::AccessManager *manager = qobject_cast<KIO::AccessManager *>(networkAccessManager());
 //    if (manager) {
@@ -306,12 +306,12 @@ KWebPage::~KWebPage()
 //    return true;
 //}
 
-//KWebWallet *KWebPage::wallet() const
+//KWebWallet *KWebEnginePage::wallet() const
 //{
 //    return d->wallet;
 //}
 
-//void KWebPage::setAllowExternalContent(bool allow)
+//void KWebEnginePage::setAllowExternalContent(bool allow)
 //{
 //    KIO::AccessManager *manager = qobject_cast<KIO::AccessManager *>(networkAccessManager());
 //    if (manager) {
@@ -319,7 +319,7 @@ KWebPage::~KWebPage()
 //    }
 //}
 
-//void KWebPage::setWallet(KWebWallet *wallet)
+//void KWebEnginePage::setWallet(KWebWallet *wallet)
 //{
 //    // Delete the current wallet if this object is its parent...
 //    if (d->wallet && this == d->wallet->parent()) {
@@ -333,7 +333,7 @@ KWebPage::~KWebPage()
 //    }
 //}
 
-void KWebPage::downloadRequest(const QNetworkRequest &request)
+void KWebEnginePage::downloadRequest(const QNetworkRequest &request)
 {
     KIO::TransferJob *job = KIO::get(request.url());
     connect(job, SIGNAL(mimetype(KIO::Job*,QString)),
@@ -345,12 +345,12 @@ void KWebPage::downloadRequest(const QNetworkRequest &request)
     KJobWidgets::setWindow(job, d->windowWidget());
 }
 
-void KWebPage::downloadUrl(const QUrl &url)
+void KWebEnginePage::downloadUrl(const QUrl &url)
 {
     downloadRequest(QNetworkRequest(url));
 }
 
-//void KWebPage::downloadResponse(QNetworkReply *reply)
+//void KWebEnginePage::downloadResponse(QNetworkReply *reply)
 //{
 //    Q_ASSERT(reply);
 
@@ -384,7 +384,7 @@ void KWebPage::downloadUrl(const QUrl &url)
 //    }
 //}
 
-//QString KWebPage::sessionMetaData(const QString &key) const
+//QString KWebEnginePage::sessionMetaData(const QString &key) const
 //{
 //    QString value;
 
@@ -396,7 +396,7 @@ void KWebPage::downloadUrl(const QUrl &url)
 //    return value;
 //}
 
-//QString KWebPage::requestMetaData(const QString &key) const
+//QString KWebEnginePage::requestMetaData(const QString &key) const
 //{
 //    QString value;
 
@@ -408,7 +408,7 @@ void KWebPage::downloadUrl(const QUrl &url)
 //    return value;
 //}
 
-//void KWebPage::setSessionMetaData(const QString &key, const QString &value)
+//void KWebEnginePage::setSessionMetaData(const QString &key, const QString &value)
 //{
 //    KIO::Integration::AccessManager *manager = qobject_cast<KIO::Integration::AccessManager *>(networkAccessManager());
 //    if (manager) {
@@ -416,7 +416,7 @@ void KWebPage::downloadUrl(const QUrl &url)
 //    }
 //}
 
-//void KWebPage::setRequestMetaData(const QString &key, const QString &value)
+//void KWebEnginePage::setRequestMetaData(const QString &key, const QString &value)
 //{
 //    KIO::Integration::AccessManager *manager = qobject_cast<KIO::Integration::AccessManager *>(networkAccessManager());
 //    if (manager) {
@@ -424,7 +424,7 @@ void KWebPage::downloadUrl(const QUrl &url)
 //    }
 //}
 
-//void KWebPage::removeSessionMetaData(const QString &key)
+//void KWebEnginePage::removeSessionMetaData(const QString &key)
 //{
 //    KIO::Integration::AccessManager *manager = qobject_cast<KIO::Integration::AccessManager *>(networkAccessManager());
 //    if (manager) {
@@ -432,7 +432,7 @@ void KWebPage::downloadUrl(const QUrl &url)
 //    }
 //}
 
-//void KWebPage::removeRequestMetaData(const QString &key)
+//void KWebEnginePage::removeRequestMetaData(const QString &key)
 //{
 //    KIO::Integration::AccessManager *manager = qobject_cast<KIO::Integration::AccessManager *>(networkAccessManager());
 //    if (manager) {
@@ -440,13 +440,13 @@ void KWebPage::downloadUrl(const QUrl &url)
 //    }
 //}
 
-//QString KWebPage::userAgentForUrl(const QUrl &_url) const
+//QString KWebEnginePage::userAgentForUrl(const QUrl &_url) const
 //{
 //    const QUrl url(_url);
 //    const QString userAgent = KProtocolManager::userAgentForHost((url.isLocalFile() ? QL1S("localhost") : url.host()));
 
 //    if (userAgent == KProtocolManager::defaultUserAgent()) {
-//        return QWebPage::userAgentForUrl(_url);
+//        return QWebEnginePage::userAgentForUrl(_url);
 //    }
 
 //    return userAgent;
@@ -463,11 +463,11 @@ static void setDisableCookieJarStorage(QNetworkAccessManager *manager, bool stat
     }
 }
 
-//bool KWebPage::acceptNavigationRequest(QWebFrame *frame, const QNetworkRequest &request, NavigationType type)
+//bool KWebEnginePage::acceptNavigationRequest(QWebFrame *frame, const QNetworkRequest &request, NavigationType type)
 //{
 //    // qDebug() << "url:" << request.url() << ", type:" << type << ", frame:" << frame;
 
-//    if (frame && d->wallet && type == QWebPage::NavigationTypeFormSubmitted) {
+//    if (frame && d->wallet && type == QWebEnginePage::NavigationTypeFormSubmitted) {
 //        d->wallet->saveFormData(frame);
 //    }
 
@@ -490,14 +490,14 @@ static void setDisableCookieJarStorage(QNetworkAccessManager *manager, bool stat
 //      If the navigation request is from the main frame, set the cross-domain
 //      meta-data value to the current url for proper integration with KCookieJar...
 //    */
-//    if (frame == mainFrame() && type != QWebPage::NavigationTypeReload) {
+//    if (frame == mainFrame() && type != QWebEnginePage::NavigationTypeReload) {
 //        setSessionMetaData(QL1S("cross-domain"), request.url().toString());
 //    }
 
-//    return QWebPage::acceptNavigationRequest(frame, request, type);
+//    return QWebEnginePage::acceptNavigationRequest(frame, request, type);
 //}
 
-//bool KWebPage::handleReply(QNetworkReply *reply, QString *contentType, KIO::MetaData *metaData)
+//bool KWebEnginePage::handleReply(QNetworkReply *reply, QString *contentType, KIO::MetaData *metaData)
 //{
 //    // Reply url...
 //    const QUrl replyUrl(reply->url());
@@ -544,7 +544,7 @@ static void setDisableCookieJarStorage(QNetworkAccessManager *manager, bool stat
 //                if (reply->operation() == QNetworkAccessManager::PostOperation) {
 //                    d->mimeType = mimeType;
 //                    QFileInfo finfo(suggestedFileName.isEmpty() ? replyUrl.fileName() : suggestedFileName);
-//                    QTemporaryFile tempFile(QDir::tempPath() + QLatin1String("/kwebpage_XXXXXX.") + finfo.suffix());
+//                    QTemporaryFile tempFile(QDir::tempPath() + QLatin1String("/kwebEnginepage_XXXXXX.") + finfo.suffix());
 //                    tempFile.setAutoRemove(false);
 //                    tempFile.open();
 //                    const QUrl destUrl = QUrl::fromLocalFile(tempFile.fileName());
@@ -627,5 +627,5 @@ static void setDisableCookieJarStorage(QNetworkAccessManager *manager, bool stat
 //    return false;
 //}
 
-#include "moc_kwebpage.cpp"
+#include "moc_kwebenginepage.cpp"
 
